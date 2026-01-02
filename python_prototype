@@ -1,0 +1,70 @@
+import random
+
+# --- Step 1: Symbolic Company Facts ---
+company_facts = {
+    "project": "Project Atlas",
+    "deadline": "June 30",
+    "budget": 50000,
+    "authorized_budget_approver": "Finance",
+    "departments": ["Engineering", "Marketing", "Finance", "HR"]
+}
+
+# --- Step 2: Define message types ---
+message_types = [
+    "deadline reminder",
+    "budget clarification",
+    "department coordination update",
+    "policy compliance reminder",
+    "engineering status update",
+    "marketing alignment update",
+    "finance process reminder",
+    "HR policy reminder",
+    "project governance note",
+    "company-wide reminder"
+]
+
+# --- Step 3: Generate message specs ---
+def generate_message_spec(facts, message_type):
+    return {
+        "project": facts["project"],
+        "deadline": facts["deadline"],
+        "budget": facts["budget"],
+        "approver": facts["authorized_budget_approver"],
+        "type": message_type
+    }
+
+# --- Step 4: Mock LLM function with variation ---
+def call_llm(spec):
+    project = spec["project"]
+    deadline = spec["deadline"]
+    budget = spec["budget"]
+    approver = spec["approver"]
+    departments = ', '.join(company_facts["departments"])
+
+    # Different templates for each message type
+    templates = {
+        "deadline reminder": f"{project} Reminder: Please ensure all work aligns with the deadline of {deadline}.",
+        "budget clarification": f"{project} Budget Update: The project budget is set at ${budget}. Only {approver} may approve any changes.",
+        "department coordination update": f"{project} Coordination Notice: {departments} teams are collaborating. Keep communication clear and aligned.",
+        "policy compliance reminder": f"{project} Policy Alert: All project activities must follow established company policies.",
+        "engineering status update": f"{project} Engineering Update: Engineering teams should track progress and meet the {deadline} deadline.",
+        "marketing alignment update": f"{project} Marketing Update: Marketing efforts should align with project milestones while respecting the approved budget of ${budget}.",
+        "finance process reminder": f"{project} Finance Reminder: Route all budget questions through {approver} per company policy.",
+        "HR policy reminder": f"{project} HR Update: HR policies are in effect and cannot be overridden.",
+        "project governance note": f"{project} Governance Note: All departments must comply with governance rules, approved budgets, and official deadlines.",
+        "company-wide reminder": f"{project} Company-Wide Notice: All teams should operate within policies, adhere to deadlines ({deadline}), and respect budget approvals by {approver}."
+    }
+
+    # Return the template based on message type
+    return templates.get(spec["type"], f"{project} Update: Please follow all policies and deadlines.")
+
+# --- Step 5: Generate 10 messages ---
+messages = []
+for msg_type in message_types:
+    spec = generate_message_spec(company_facts, msg_type)
+    message = call_llm(spec)
+    messages.append(message)
+
+# --- Step 6: Print messages ---
+for i, msg in enumerate(messages):
+    print(f"Message {i+1}: {msg}\n")
